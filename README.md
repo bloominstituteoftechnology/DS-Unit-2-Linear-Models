@@ -14,7 +14,7 @@ If you're on Windows, during installation, you'll be asked whether to "Add Anaco
 
 **4.** [Clone](https://help.github.com/en/articles/cloning-a-repository) your fork of this repository, to create a local copy on your computer.
 
-**5.** Navigate into the directory on your local computer where you cloned the repository.
+**5.** In your terminal, navigate into the directory where you cloned the repository.
 
 **6.** Enter this command in your terminal:  
 
