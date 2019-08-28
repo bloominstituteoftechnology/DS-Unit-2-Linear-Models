@@ -1,0 +1,21 @@
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - category_encoders=2.0.0
+  - dash=1.1.1
+  - dash-bootstrap-components=0.7.0
+  - dash-daq=0.1.7
+  - eli5=0.10.0
+  - jupyter=1.0.0
+  - matplotlib=3.1.0
+  - matplotlib-base=3.1.0
+  - pandas=0.23.4
+  - pandas-profiling=2.3.0
+  - pdpbox=0.2.0
+  - plotly=4.1.0
+  - py-xgboost=0.90
+  - python-graphviz=0.12
+  - seaborn=0.9.0
+  - scikit-learn=0.21.3
+  - shap=0.29.3
