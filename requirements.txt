@@ -1,4 +1,4 @@
-category_encoders==0.2.0
+category_encoders==2.0.0
 eli5==0.10.0
 matplotlib==3.1.0
 numpy==1.17.1
