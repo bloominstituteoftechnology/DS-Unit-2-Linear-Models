@@ -61,6 +61,7 @@ df.describe()
 
 #%%
 df.isna().sum()
+df['interest_numeric'] = df['interest_level'].replace({'low':1,'medium':2,'high':3})
 
 #%%
 target = 'price'
@@ -140,6 +141,7 @@ pyplot.suptitle(None)
 
 pyplot.show()
 
-
+#%%
+# df.corr()
 
 #%%
