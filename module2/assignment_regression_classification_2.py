@@ -85,7 +85,7 @@ cleaned['created_week'] = cleaned['created_dt'].dt.weekofyear
 cleaned['interest_numeric'] = cleaned['interest_level'].replace({'low':1,'medium':2,'high':3})
 # cleaned['is_broadway'] = cleaned['display_address']=='Broadway'
 cleaned['display_address'] = cleaned['display_address'].str.strip().str.lower()
-top_addresses = list(cleaned['display_address'].value_counts()[cleaned['display_address'].value_counts() >= 10].index)
+top_addresses = list(cleaned['display_address'].value_counts()[cleaned['display_address'].value_counts() >= 15].index)
 cleaned['top_addresses'] = cleaned['display_address'].where(cleaned['display_address'].isin(top_addresses), other='other')
 cleaned = cleaned.join(pandas.get_dummies(cleaned['top_addresses'], prefix='address_'))
 
@@ -95,14 +95,15 @@ cleaned = cleaned.join(pandas.get_dummies(cleaned['top_addresses'], prefix='addr
 cleaned['top_addresses'].value_counts()
 
 #%%
-# cleaned
+cleaned['created_dt'].dt.month
 
 
 #%%
 import sklearn.model_selection as model_selection
 
-train, test = model_selection.train_test_split(cleaned)
-
+# train, test = model_selection.train_test_split(cleaned)
+train = cleaned[(cleaned['created_dt'].dt.month==4) | (cleaned['created_dt'].dt.month==5)]
+test = cleaned[cleaned['created_dt'].dt.month==6]
 
 #%%
 cleaned.columns
@@ -159,7 +160,8 @@ print(f'Test Mean Absolute Error: {test_mae}')
 print(f'Test R^2 score: {test_r2}')
 
 
-
+#%%
+# df.describe().loc['std']
 
 #%%
 
