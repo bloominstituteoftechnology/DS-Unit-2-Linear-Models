@@ -147,16 +147,22 @@ def clean(	frame:pandas.DataFrame,
 	return(cleaned)
 
 #%%
-
 cleaned = clean(df_ofd, max_cardinality=100, exclude_cols=['SALE_DATE'])
 
 #%%
 list(cleaned.columns)
 
 #%%
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
 
 target = 'SALE_PRICE'
 features = cleaned.columns[cleaned.dtypes!='object'].drop([target, 'sale_dt'])
+train_test = pandas.DataFrame(scaler.fit_transform(cleaned[list(features)+[target]]), columns=cleaned[list(features)+[target]].columns)
+train_test.index = cleaned.index
+
+#%%
+train_test
 
 #%%
 list(features)
@@ -166,11 +172,11 @@ len(features)
 
 #%%
 
-train = cleaned[(df_ofd['sale_dt'] < pandas.to_datetime('2019-04-01')) &
-				(df_ofd['sale_dt'] >= pandas.to_datetime('2019-01-01'))]
+train = train_test[	(df_ofd['sale_dt'] < pandas.to_datetime('2019-04-01')) &
+					(df_ofd['sale_dt'] >= pandas.to_datetime('2019-01-01'))]
 
-test = cleaned[	(df_ofd['sale_dt'] < pandas.to_datetime('2019-05-01')) &
-				(df_ofd['sale_dt'] >= pandas.to_datetime('2019-04-01'))]
+test = train_test[	(df_ofd['sale_dt'] < pandas.to_datetime('2019-05-01')) &
+					(df_ofd['sale_dt'] >= pandas.to_datetime('2019-04-01'))]
 
 #%%
 
@@ -214,9 +220,15 @@ for i in range(1,train[features].shape[1]+1):
 	r2 = metrics.r2_score(test[target], predicted)
 	rmse = numpy.sqrt(metrics.mean_squared_error(test[target], predicted))
 	mae = metrics.mean_absolute_error(test[target], predicted)
+	# r2 = metrics.r2_score(test[target], predicted)
+	# inversed = scaler.inverse_transform(numpy.array(test[features])+numpy.array(test[target]))
+	# rmse_rescaled = numpy.sqrt(metrics.mean_squared_error(scaler.inverse_transform(test[target]), scaler.inverse_transform(predicted)))
+	# mae_rescaled = metrics.mean_absolute_error(scaler.inverse_transform(test[target]), scaler.inverse_transform(predicted))
 	print(f'r-squared score for the {i} best features: {r2}')
 	print(f'RMSE for the {i} best features: {rmse}')
 	print(f'MAE for the {i} best features: {mae}')
+	# print(f'RMSE un-transformed for the {i} best features: {rmse_rescaled}')
+	# print(f'MAE un-transformed for the {i} best features: {mae_rescaled}')
 	r2s_linear.append(r2)
 
 #%%
@@ -232,8 +244,8 @@ for a in alphas:
 
 	r2 = metrics.r2_score(test[target], predicted)
 	rmse = numpy.sqrt(metrics.mean_squared_error(test[target], predicted))
-	# print(f'r-squared score at alpha={(i/10)**2}: {r2}')
-	# print(f'RMSE at alpha={(i/10)**2}: {rmse}')
+	# print(f'r-squared score at alpha={a}: {r2}')
+	# print(f'RMSE at alpha={a}: {rmse}')
 	r2s_ridge.append(r2)
 
 #%%
