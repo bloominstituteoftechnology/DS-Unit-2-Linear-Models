@@ -197,22 +197,26 @@ print(f'RMSE for the baseline: {rmse}')
 print(f'MAE for the baseline: {mae}')
 
 #%%
+train[target].isna().sum()
+
+#%%
 
 r2s_linear = []
 for i in range(1,train[features].shape[1]+1):
 	selector = SelectKBest(score_func=f_regression, k=i)
-	train_selected = selector.fit_transform(train[features], train[target])
+	with numpy.errstate(invalid='ignore', divide='ignore'):
+		# Ignore all the warnings we get for all-0 columns
+		train_selected = selector.fit_transform(train[features], train[target])
 	test_selected = selector.transform(test[features])
-	# print(features[selector.get_support()])
 	lr_model = LinearRegression()
 	lr_model.fit(train_selected, train[target])
 	predicted = lr_model.predict(test_selected)
 	r2 = metrics.r2_score(test[target], predicted)
 	rmse = numpy.sqrt(metrics.mean_squared_error(test[target], predicted))
 	mae = metrics.mean_absolute_error(test[target], predicted)
-	# print(f'r-squared score for the {i} best features: {r2}')
-	# print(f'RMSE for the {i} best features: {rmse}')
-	# print(f'MAE for the {i} best features: {mae}')
+	print(f'r-squared score for the {i} best features: {r2}')
+	print(f'RMSE for the {i} best features: {rmse}')
+	print(f'MAE for the {i} best features: {mae}')
 	r2s_linear.append(r2)
 
 #%%
