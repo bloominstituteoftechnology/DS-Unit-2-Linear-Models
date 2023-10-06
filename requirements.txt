@@ -1,0 +1,8 @@
+pandas
+numpy
+pandas-profiling
+matplotlib
+scikit-learn
+plotly
+ipywidgets
+category_encoders
